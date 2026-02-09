@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Be My Valentine? 💖</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            overflow: hidden;
+            background: linear-gradient(135deg, #fff0f6 0%, #ffe6f2 25%, #ffd9ec 50%, #ffe6f2 75%, #fff0f6 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* Left section with falling decorations */
+        .falling-section {
+            display: none;
+        }
+
+        /* Falling decorations across entire screen */
+        .falling-decoration {
+            position: fixed;
+            font-size: 30px;
+            animation: fallDown linear infinite;
+            opacity: 0.7;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        @keyframes fallDown {
+            0% {
+                top: -10%;
+                transform: rotate(0deg);
+            }
+            100% {
+                top: 110%;
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Falling items */
+        .gift-wrap {
+            position: absolute;
+            font-size: 30px;
+            animation: fall linear infinite;
+            opacity: 0.8;
+        }
+
+        @keyframes fall {
+            0% {
+                top: -10%;
+                transform: rotate(0deg);
+            }
+            100% {
+                top: 110%;
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Main container */
+        .container {
+            position: relative;
+            z-index: 2;
+            width: 85%;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* Card styling */
+        .card {
+            background: #ffffff;
+            border-radius: 30px;
+            padding: 50px 40px;
+            box-shadow: 0 25px 70px rgba(255, 77, 148, 0.25),
+                        0 10px 30px rgba(255, 105, 180, 0.15),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+            text-align: center;
+            border: 2px solid rgba(255, 179, 217, 0.3);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(255, 182, 217, 0.08) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        .card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, transparent 0%, rgba(255, 182, 217, 0.03) 50%, transparent 100%);
+            pointer-events: none;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.15); opacity: 1; }
+        }
+
+        .card-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Proposal component */
+        #proposal {
+            display: block;
+            animation: fadeIn 0.8s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .proposal-gif {
+            width: 180px;
+            height: auto;
+            margin-bottom: 25px;
+            border-radius: 15px;
+            animation: gentleBounce 2s ease-in-out infinite;
+        }
+
+        @keyframes gentleBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .proposal-text {
+            font-size: 2.2rem;
+            color: #e91e63;
+            margin-bottom: 40px;
+            font-weight: 700;
+            text-shadow: 0 2px 10px rgba(233, 30, 99, 0.15);
+            letter-spacing: 0.5px;
+            line-height: 1.4;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            min-height: 100px;
+            flex-wrap: wrap;
+            padding: 20px;
+        }
+
+        button {
+            padding: 16px 45px;
+            font-size: 1.15rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            letter-spacing: 0.5px;
+        }
+
+        #yesBtn {
+            background: linear-gradient(135deg, #ff4081 0%, #e91e63 100%);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #yesBtn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        #yesBtn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        #yesBtn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 12px 30px rgba(233, 30, 99, 0.4);
+        }
+
+        #yesBtn:active {
+            transform: translateY(-1px) scale(1.02);
+        }
+
+        #noBtn {
+            background: linear-gradient(135deg, #e3f2fd 0%, #90caf9 100%);
+            color: #1565c0;
+            position: relative;
+            transition: none;
+            border: 2px solid rgba(144, 202, 249, 0.5);
+            z-index: 50;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        #noBtn.moving {
+            position: absolute;
+            z-index: 100;
+        }
+
+        /* Accepted component */
+        #accepted {
+            display: none;
+        }
+
+        #accepted.show {
+            display: block;
+            animation: scaleIn 0.8s ease-in;
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.5) rotate(-10deg);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+            }
+        }
+
+        .accepted-gif {
+            width: 180px;
+            height: auto;
+            margin-bottom: 25px;
+            border-radius: 15px;
+            animation: gentlePulse 2s ease-in-out infinite;
+        }
+
+        @keyframes gentlePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+        }
+
+        .accepted-text {
+            font-size: 1.9rem;
+            color: #e91e63;
+            margin-bottom: 30px;
+            line-height: 1.7;
+            font-weight: 600;
+            text-shadow: 0 2px 10px rgba(233, 30, 99, 0.1);
+            letter-spacing: 0.3px;
+        }
+
+        .heart-container {
+            position: relative;
+            height: 100px;
+            margin-top: 20px;
+        }
+
+        .floating-heart {
+            position: absolute;
+            font-size: 25px;
+            animation: floatHeart 3s ease-in-out infinite;
+            opacity: 0;
+        }
+
+        @keyframes floatHeart {
+            0% {
+                bottom: 0;
+                opacity: 0;
+                transform: translateX(0) rotate(0deg);
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                bottom: 100px;
+                opacity: 0;
+                transform: translateX(30px) rotate(15deg);
+            }
+        }
+
+        .floating-heart:nth-child(1) { left: 20%; animation-delay: 0s; }
+        .floating-heart:nth-child(2) { left: 40%; animation-delay: 1s; }
+        .floating-heart:nth-child(3) { left: 60%; animation-delay: 2s; }
+        .floating-heart:nth-child(4) { left: 80%; animation-delay: 0.5s; }
+
+        /* Hidden class */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Confetti burst effect */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #ff69b4;
+            animation: confettiFall 3s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes confettiFall {
+            0% {
+                opacity: 1;
+                transform: translateY(0) rotate(0deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(500px) rotate(720deg);
+            }
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                width: 90%;
+                max-width: 100%;
+            }
+
+            .card {
+                padding: 35px 25px;
+                border-radius: 25px;
+            }
+
+            .proposal-text {
+                font-size: 1.6rem;
+            }
+
+            .accepted-text {
+                font-size: 1.5rem;
+            }
+
+            button {
+                padding: 14px 35px;
+                font-size: 1.05rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .card {
+                padding: 30px 20px;
+            }
+
+            .proposal-text {
+                font-size: 1.4rem;
+                margin-bottom: 30px;
+            }
+
+            .accepted-text {
+                font-size: 1.3rem;
+            }
+
+            button {
+                padding: 12px 30px;
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Falling decorations section -->
+    <div class="falling-section" id="fallingSection"></div>
+
+    <!-- Main container -->
+    <div class="container">
+        <!-- Proposal Component -->
+        <div class="card" id="proposal">
+            <div class="card-content">
+                <img src="proposal.gif" alt="Cute Valentine" class="proposal-gif">
+                <div class="proposal-text">
+                    Will you be my Valentine? 💖
+                </div>
+                <div class="button-container" id="buttonContainer">
+                    <button id="yesBtn">Yes! 💕</button>
+                    <button id="noBtn">No</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Accepted Component -->
+        <div class="card" id="accepted">
+            <div class="card-content">
+                <img src="accepted.gif" alt="Cute Valentine Hug" class="accepted-gif">
+                <div class="accepted-text">
+                    Yay! You just made my heart the happiest 💕<br>
+                    Happy Valentine's Day ❤️
+                </div>
+                <div class="heart-container">
+                    <div class="floating-heart">💖</div>
+                    <div class="floating-heart">💕</div>
+                    <div class="floating-heart">❤️</div>
+                    <div class="floating-heart">💝</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Create falling ribbons/confetti across entire screen
+        const decorationEmojis = ['🎀', '🎉', '🎊', '🎁', '💝', '🌹', '✨', '💕', '❤️'];
+        
+        // Create falling decorations on page load
+        for (let i = 0; i < 25; i++) {
+            const decoration = document.createElement('div');
+            decoration.className = 'falling-decoration';
+            decoration.textContent = decorationEmojis[Math.floor(Math.random() * decorationEmojis.length)];
+            decoration.style.left = Math.random() * 100 + '%';
+            // Start at random positions in the fall
+            decoration.style.top = -(Math.random() * 100) + '%';
+            decoration.style.animationDuration = (Math.random() * 3 + 4) + 's';
+            decoration.style.animationDelay = (Math.random() * 5) + 's';
+            decoration.style.fontSize = (Math.random() * 20 + 20) + 'px';
+            document.body.appendChild(decoration);
+        }
+
+        // Button functionality
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const buttonContainer = document.getElementById('buttonContainer');
+        const proposal = document.getElementById('proposal');
+        const accepted = document.getElementById('accepted');
+
+        // Move No button on hover or click
+        let isMoving = false;
+
+        function moveNoButton(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            if (isMoving) return;
+            isMoving = true;
+
+            // Add moving class to make it absolutely positioned
+            if (!noBtn.classList.contains('moving')) {
+                noBtn.classList.add('moving');
+            }
+
+            // Use the entire card as the movement area
+            const card = document.querySelector('#proposal .card-content');
+            const cardRect = card.getBoundingClientRect();
+            const buttonRect = noBtn.getBoundingClientRect();
+            const yesRect = yesBtn.getBoundingClientRect();
+
+            const btnW = buttonRect.width;
+            const btnH = buttonRect.height;
+            const padding = 10;
+
+            const maxX = cardRect.width - btnW - padding;
+            const maxY = cardRect.height - btnH - padding;
+
+            // Get cursor position relative to card
+            const cursorX = e.clientX - cardRect.left;
+            const cursorY = e.clientY - cardRect.top;
+
+            let bestX = 0, bestY = 0, bestDist = 0;
+
+            // Try many random positions and pick the one farthest from cursor & not overlapping Yes
+            for (let i = 0; i < 80; i++) {
+                const rx = Math.max(padding, Math.random() * maxX);
+                const ry = Math.max(padding, Math.random() * maxY);
+
+                // Check overlap with Yes button (in card-relative coords)
+                const noLeft = cardRect.left + rx;
+                const noRight = noLeft + btnW;
+                const noTop = cardRect.top + ry;
+                const noBottom = noTop + btnH;
+
+                const overlapsYes = !(noRight < yesRect.left - 5 ||
+                                      noLeft > yesRect.right + 5 ||
+                                      noBottom < yesRect.top - 5 ||
+                                      noTop > yesRect.bottom + 5);
+                if (overlapsYes) continue;
+
+                // Distance from cursor
+                const centerX = rx + btnW / 2;
+                const centerY = ry + btnH / 2;
+                const dist = Math.sqrt((centerX - cursorX) ** 2 + (centerY - cursorY) ** 2);
+
+                if (dist > bestDist) {
+                    bestDist = dist;
+                    bestX = rx;
+                    bestY = ry;
+                }
+            }
+
+            noBtn.style.left = bestX + 'px';
+            noBtn.style.top = bestY + 'px';
+
+            // Small cooldown to prevent event flooding
+            requestAnimationFrame(() => { isMoving = false; });
+        }
+
+        // Use mouseover (fires repeatedly) instead of mouseenter (fires once)
+        noBtn.addEventListener('mouseover', moveNoButton);
+        noBtn.addEventListener('touchstart', moveNoButton, { passive: false });
+        noBtn.addEventListener('click', moveNoButton);
+
+        // Yes button click - show accepted component
+        yesBtn.addEventListener('click', function() {
+            // Create confetti effect
+            createConfetti();
+            
+            // Transition to accepted component
+            setTimeout(() => {
+                proposal.style.display = 'none';
+                accepted.classList.add('show');
+            }, 500);
+        });
+
+        // Create confetti burst
+        function createConfetti() {
+            const colors = ['#ff69b4', '#ff1744', '#ff6b9d', '#ffc3d5', '#ff85c1'];
+            for (let i = 0; i < 30; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.top = '50%';
+                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDelay = Math.random() * 0.5 + 's';
+                confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => confetti.remove(), 3000);
+            }
+        }
+    </script>
+</body>
+</html>
